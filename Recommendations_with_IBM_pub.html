@@ -15998,16 +15998,16 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[&#39;machine learning and the science of choosing&#39;,
- &#39;timeseries data analysis of iot events by using jupyter notebook&#39;,
- &#39;i am not a data scientist – ibm watson data lab&#39;,
- &#39;graph-based machine learning&#39;,
+<pre>[&#39;generalization in deep learning&#39;,
+ &#39;spark-based machine learning tools for capturing word meanings&#39;,
  &#39;flightpredict ii: the sequel  – ibm watson data lab&#39;,
+ &#39;maximize oil company profits&#39;,
+ &#39;declarative machine learning&#39;,
+ &#39;data tidying in data science experience&#39;,
+ &#39;56594    lifelong (machine) learning: how automation ca...\nName: title, dtype: object&#39;,
  &#39;visualize data with the matplotlib library&#39;,
- &#39;learn tensorflow and deep learning together and now!&#39;,
- &#39;data science for real-time streaming analytics&#39;,
- &#39;apache spark lab, part 3: machine learning&#39;,
- &#39;easy json loading and social sharing in dsx notebooks&#39;]</pre>
+ &#39;the nurse assignment problem&#39;,
+ &#39;optimizing a marketing campaign: moving from predictions to actions&#39;]</pre>
 </div>
 
 </div>
@@ -16112,15 +16112,17 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
     <span class="n">user_similarity</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="n">user_id</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># total no. of times user has seen articles</span>
-    <span class="n">num_interactions</span> <span class="o">=</span> <span class="n">user_item</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user_similarity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">num_interactions</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;user_id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+    <span class="n">user_interactions</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">:</span> <span class="n">num_interactions</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s1">&#39;num_interactions&#39;</span><span class="p">:</span> <span class="n">num_interactions</span><span class="p">})</span>
 
     <span class="c1"># creating a dataframe with neighbour ids, similarity and num_interactions</span>
-    <span class="n">neighbors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">user_similarity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">user_similarity</span><span class="p">,</span> <span class="n">num_interactions</span><span class="p">)),</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">,</span><span class="s1">&#39;similarity&#39;</span><span class="p">,</span><span class="s1">&#39;num_interactions&#39;</span><span class="p">])</span>
+    <span class="n">neighbors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">user_similarity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">user_similarity</span><span class="p">)),</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">,</span><span class="s1">&#39;similarity&#39;</span><span class="p">])</span>
+    <span class="n">neighbors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">neighbors_df</span><span class="p">,</span> <span class="n">user_interactions</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span> <span class="o">=</span> <span class="s1">&#39;neighbor_id&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
     <span class="c1"># sorting by similarity and then by num_interactions</span>
-    <span class="n">neighbors_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;similarity&#39;</span><span class="p">,</span><span class="s1">&#39;num_interactions&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">])</span>    
+    <span class="n">neighbors_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;similarity&#39;</span><span class="p">,</span><span class="s1">&#39;num_interactions&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">],</span> <span class="n">inplace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>  
     
-    <span class="k">return</span> <span class="n">neighbors_df</span> <span class="c1"># Return the dataframe specified in the doc_string</span>
+    <span class="k">return</span> <span class="n">neighbors_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span> <span class="c1"># Return the dataframe specified in the doc_string</span>
 
 
 <span class="k">def</span> <span class="nf">user_user_recs_part2</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
@@ -16201,1058 +16203,6 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">user_similarity</span> <span class="o">=</span> <span class="n">user_item</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">user_item</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mf">1.0</span><span class="p">])</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">user_similarity</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">num_interactions</span> <span class="o">=</span> <span class="n">user_item</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user_similarity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">num_interactions</span>
-
-<span class="n">neighbors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">user_similarity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">user_similarity</span><span class="p">,</span> <span class="n">num_interactions</span><span class="p">)),</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">,</span><span class="s1">&#39;similarity&#39;</span><span class="p">,</span><span class="s1">&#39;num_interactions&#39;</span><span class="p">])</span>
-
-<span class="n">neighbors_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;similarity&#39;</span><span class="p">,</span><span class="s1">&#39;num_interactions&#39;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">])</span>
-<span class="n">user_similarity</span> <span class="o">=</span> <span class="n">user_item</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">user_item</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mf">1.0</span><span class="p">])</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">user_similarity</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">user_item</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user_similarity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-<span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">user_similarity</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">user_similarity</span><span class="p">,</span> <span class="n">num_interactions</span><span class="p">))</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>[(3933, 35.0, 35.0),
- (23, 17.0, 135.0),
- (3782, 17.0, 135.0),
- (203, 15.0, 96.0),
- (4459, 15.0, 96.0),
- (3870, 14.0, 75.0),
- (131, 14.0, 75.0),
- (4201, 13.0, 40.0),
- (46, 13.0, 40.0),
- (5041, 12.0, 44.0),
- (395, 12.0, 46.0),
- (3697, 12.0, 100.0),
- (49, 12.0, 101.0),
- (322, 11.0, 53.0),
- (242, 11.0, 59.0),
- (3622, 11.0, 52.0),
- (3910, 11.0, 60.0),
- (98, 10.0, 97.0),
- (754, 10.0, 44.0),
- (2982, 10.0, 58.0),
- (290, 10.0, 58.0),
- (3540, 10.0, 72.0),
- (4642, 10.0, 43.0),
- (3764, 10.0, 97.0),
- (912, 10.0, 71.0),
- (268, 9.0, 36.0),
- (40, 9.0, 52.0),
- (3775, 9.0, 37.0),
- (4932, 9.0, 52.0),
- (4134, 9.0, 30.0),
- (52, 9.0, 58.0),
- (621, 9.0, 36.0),
- (5138, 9.0, 71.0),
- (1355, 9.0, 29.0),
- (4785, 9.0, 62.0),
- (3651, 9.0, 35.0),
- (3637, 9.0, 44.0),
- (256, 9.0, 45.0),
- (273, 9.0, 31.0),
- (371, 9.0, 46.0),
- (204, 9.0, 72.0),
- (3784, 9.0, 46.0),
- (3621, 9.0, 45.0),
- (3596, 9.0, 59.0),
- (21, 9.0, 61.0),
- (135, 9.0, 46.0),
- (4038, 8.0, 34.0),
- (3532, 8.0, 50.0),
- (64, 8.0, 40.0),
- (186, 8.0, 51.0),
- (184, 8.0, 63.0),
- (3483, 8.0, 48.0),
- (214, 8.0, 36.0),
- (2926, 8.0, 66.0),
- (696, 8.0, 47.0),
- (249, 8.0, 48.0),
- (3141, 8.0, 35.0),
- (765, 8.0, 57.0),
- (619, 8.0, 66.0),
- (4755, 8.0, 55.0),
- (4778, 8.0, 28.0),
- (4892, 8.0, 61.0),
- (3136, 8.0, 41.0),
- (488, 8.0, 32.0),
- (334, 8.0, 33.0),
- (4293, 8.0, 45.0),
- (1897, 8.0, 34.0),
- (4934, 7.0, 27.0),
- (125, 7.0, 42.0),
- (4484, 7.0, 41.0),
- (445, 7.0, 29.0),
- (4206, 7.0, 31.0),
- (4774, 7.0, 41.0),
- (3684, 7.0, 37.0),
- (5013, 7.0, 18.0),
- (60, 7.0, 72.0),
- (38, 7.0, 40.0),
- (656, 7.0, 36.0),
- (2790, 7.0, 22.0),
- (187, 7.0, 28.0),
- (10, 7.0, 19.0),
- (4209, 7.0, 32.0),
- (665, 7.0, 43.0),
- (3856, 7.0, 45.0),
- (3632, 7.0, 27.0),
- (288, 7.0, 58.0),
- (5140, 7.0, 71.0),
- (4706, 7.0, 57.0),
- (5079, 7.0, 33.0),
- (54, 7.0, 19.0),
- (72, 7.0, 33.0),
- (67, 7.0, 45.0),
- (3740, 7.0, 71.0),
- (58, 7.0, 70.0),
- (3024, 7.0, 32.0),
- (2430, 6.0, 18.0),
- (409, 6.0, 39.0),
- (733, 6.0, 16.0),
- (4883, 6.0, 49.0),
- (3354, 6.0, 17.0),
- (3408, 6.0, 27.0),
- (193, 6.0, 12.0),
- (4277, 6.0, 56.0),
- (4225, 6.0, 15.0),
- (3485, 6.0, 34.0),
- (195, 6.0, 51.0),
- (3949, 6.0, 37.0),
- (3358, 6.0, 25.0),
- (4543, 6.0, 18.0),
- (379, 6.0, 39.0),
- (170, 6.0, 71.0),
- (211, 6.0, 33.0),
- (3693, 6.0, 38.0),
- (807, 6.0, 41.0),
- (223, 6.0, 24.0),
- (591, 6.0, 56.0),
- (3794, 6.0, 41.0),
- (3353, 6.0, 40.0),
- (235, 6.0, 24.0),
- (90, 6.0, 22.0),
- (3818, 6.0, 30.0),
- (3197, 6.0, 32.0),
- (4404, 6.0, 24.0),
- (295, 6.0, 60.0),
- (261, 6.0, 20.0),
- (263, 6.0, 21.0),
- (3006, 6.0, 58.0),
- (4471, 6.0, 26.0),
- (3572, 6.0, 21.0),
- (3879, 6.0, 28.0),
- (362, 6.0, 39.0),
- (28, 6.0, 26.0),
- (69, 6.0, 28.0),
- (3578, 6.0, 49.0),
- (2981, 6.0, 38.0),
- (324, 6.0, 27.0),
- (689, 6.0, 17.0),
- (2975, 6.0, 58.0),
- (87, 6.0, 30.0),
- (1040, 6.0, 37.0),
- (8, 6.0, 57.0),
- (3, 6.0, 40.0),
- (113, 6.0, 49.0),
- (3169, 6.0, 70.0),
- (111, 6.0, 27.0),
- (4595, 6.0, 36.0),
- (244, 6.0, 19.0),
- (330, 6.0, 33.0),
- (1059, 6.0, 36.0),
- (4824, 6.0, 25.0),
- (511, 6.0, 26.0),
- (2161, 6.0, 27.0),
- (4933, 6.0, 20.0),
- (1353, 5.0, 17.0),
- (319, 5.0, 38.0),
- (1330, 5.0, 11.0),
- (4082, 5.0, 15.0),
- (4088, 5.0, 24.0),
- (304, 5.0, 24.0),
- (312, 5.0, 20.0),
- (659, 5.0, 12.0),
- (3589, 5.0, 11.0),
- (598, 5.0, 18.0),
- (750, 5.0, 39.0),
- (280, 5.0, 15.0),
- (4037, 5.0, 23.0),
- (4167, 5.0, 23.0),
- (365, 5.0, 16.0),
- (3067, 5.0, 11.0),
- (3329, 5.0, 9.0),
- (1271, 5.0, 11.0),
- (639, 5.0, 29.0),
- (3118, 5.0, 27.0),
- (640, 5.0, 23.0),
- (4021, 5.0, 38.0),
- (251, 5.0, 24.0),
- (1244, 5.0, 24.0),
- (647, 5.0, 23.0),
- (215, 5.0, 19.0),
- (4130, 5.0, 27.0),
- (3264, 5.0, 25.0),
- (4901, 5.0, 41.0),
- (3057, 5.0, 25.0),
- (383, 5.0, 32.0),
- (3741, 5.0, 27.0),
- (4900, 5.0, 33.0),
- (3100, 5.0, 25.0),
- (3710, 5.0, 18.0),
- (641, 5.0, 21.0),
- (155, 5.0, 25.0),
- (4697, 5.0, 19.0),
- (3005, 5.0, 29.0),
- (4788, 5.0, 19.0),
- (456, 5.0, 19.0),
- (82, 5.0, 15.0),
- (557, 5.0, 20.0),
- (558, 5.0, 11.0),
- (88, 5.0, 33.0),
- (4495, 5.0, 20.0),
- (3172, 5.0, 30.0),
- (1567, 5.0, 14.0),
- (3898, 5.0, 37.0),
- (2908, 5.0, 21.0),
- (4502, 5.0, 15.0),
- (1062, 5.0, 25.0),
- (2903, 5.0, 44.0),
- (3801, 5.0, 30.0),
- (114, 5.0, 16.0),
- (4510, 5.0, 8.0),
- (4792, 5.0, 15.0),
- (4802, 5.0, 23.0),
- (3523, 5.0, 10.0),
- (3305, 5.0, 15.0),
- (926, 5.0, 29.0),
- (3636, 5.0, 15.0),
- (3829, 5.0, 38.0),
- (11, 5.0, 30.0),
- (510, 5.0, 22.0),
- (907, 5.0, 18.0),
- (22, 5.0, 17.0),
- (24, 5.0, 19.0),
- (26, 5.0, 13.0),
- (4453, 5.0, 13.0),
- (890, 5.0, 8.0),
- (45, 5.0, 52.0),
- (535, 5.0, 40.0),
- (471, 5.0, 24.0),
- (3500, 5.0, 52.0),
- (63, 5.0, 16.0),
- (65, 5.0, 18.0),
- (3376, 5.0, 21.0),
- (670, 5.0, 27.0),
- (829, 5.0, 41.0),
- (2423, 5.0, 9.0),
- (3967, 5.0, 37.0),
- (3966, 5.0, 29.0),
- (168, 5.0, 29.0),
- (4231, 5.0, 22.0),
- (4248, 5.0, 17.0),
- (5023, 5.0, 16.0),
- (4526, 5.0, 21.0),
- (1163, 5.0, 26.0),
- (1162, 5.0, 18.0),
- (3943, 5.0, 16.0),
- (4725, 5.0, 23.0),
- (3441, 5.0, 25.0),
- (3535, 5.0, 17.0),
- (418, 5.0, 46.0),
- (3237, 5.0, 15.0),
- (126, 5.0, 31.0),
- (4515, 5.0, 24.0),
- (4517, 5.0, 28.0),
- (373, 4.0, 9.0),
- (438, 4.0, 24.0),
- (1633, 4.0, 17.0),
- (3732, 4.0, 11.0),
- (4449, 4.0, 23.0),
- (3474, 4.0, 17.0),
- (521, 4.0, 25.0),
- (490, 4.0, 22.0),
- (492, 4.0, 24.0),
- (321, 4.0, 29.0),
- (2897, 4.0, 6.0),
- (512, 4.0, 22.0),
- (4241, 4.0, 25.0),
- (4323, 4.0, 22.0),
- (1705, 4.0, 10.0),
- (4282, 4.0, 10.0),
- (5034, 4.0, 4.0),
- (4620, 4.0, 13.0),
- (2144, 4.0, 19.0),
- (607, 4.0, 14.0),
- (668, 4.0, 44.0),
- (4588, 4.0, 21.0),
- (1426, 4.0, 9.0),
- (669, 4.0, 54.0),
- (3633, 4.0, 25.0),
- (1386, 4.0, 14.0),
- (3336, 4.0, 20.0),
- (536, 4.0, 20.0),
- (538, 4.0, 31.0),
- (3705, 4.0, 29.0),
- (347, 4.0, 17.0),
- (3466, 4.0, 14.0),
- (3614, 4.0, 28.0),
- (4186, 4.0, 12.0),
- (1446, 4.0, 12.0),
- (420, 4.0, 39.0),
- (4268, 4.0, 21.0),
- (3611, 4.0, 30.0),
- (343, 4.0, 8.0),
- (4356, 4.0, 17.0),
- (4272, 4.0, 19.0),
- (1401, 4.0, 20.0),
- (3061, 4.0, 30.0),
- (3058, 4.0, 30.0),
- (4255, 4.0, 18.0),
- (4254, 4.0, 18.0),
- (4274, 4.0, 23.0),
- (4511, 4.0, 17.0),
- (3292, 4.0, 18.0),
- (3654, 4.0, 25.0),
- (4522, 4.0, 19.0),
- (3430, 4.0, 20.0),
- (542, 4.0, 20.0),
- (649, 4.0, 27.0),
- (4497, 4.0, 23.0),
- (253, 4.0, 4.0),
- (5057, 4.0, 41.0),
- (745, 4.0, 22.0),
- (3960, 4.0, 26.0),
- (181, 4.0, 21.0),
- (3421, 4.0, 14.0),
- (3970, 4.0, 25.0),
- (3971, 4.0, 9.0),
- (763, 4.0, 24.0),
- (197, 4.0, 30.0),
- (3783, 4.0, 20.0),
- (213, 4.0, 19.0),
- (2305, 4.0, 5.0),
- (995, 4.0, 10.0),
- (5077, 4.0, 19.0),
- (3877, 4.0, 23.0),
- (57, 4.0, 17.0),
- (56, 4.0, 27.0),
- (3425, 4.0, 13.0),
- (55, 4.0, 29.0),
- (4843, 4.0, 7.0),
- (4002, 4.0, 10.0),
- (884, 4.0, 6.0),
- (5080, 4.0, 30.0),
- (4013, 4.0, 11.0),
- (3486, 4.0, 38.0),
- (2718, 4.0, 14.0),
- (860, 4.0, 22.0),
- (3417, 4.0, 29.0),
- (2471, 4.0, 10.0),
- (3802, 4.0, 22.0),
- (1068, 4.0, 23.0),
- (843, 4.0, 13.0),
- (122, 4.0, 17.0),
- (828, 4.0, 14.0),
- (824, 4.0, 4.0),
- (5124, 4.0, 18.0),
- (845, 4.0, 25.0),
- (4736, 4.0, 9.0),
- (134, 4.0, 23.0),
- (136, 4.0, 5.0),
- (1137, 4.0, 19.0),
- (140, 4.0, 20.0),
- (4732, 4.0, 24.0),
- (145, 4.0, 29.0),
- (4882, 4.0, 12.0),
- (794, 4.0, 31.0),
- (3518, 4.0, 18.0),
- (85, 4.0, 18.0),
- (164, 4.0, 11.0),
- (5078, 4.0, 45.0),
- (4904, 4.0, 16.0),
- (4668, 4.0, 22.0),
- (688, 4.0, 39.0),
- (707, 4.0, 17.0),
- (4648, 4.0, 10.0),
- (5069, 4.0, 16.0),
- (2586, 4.0, 6.0),
- (698, 4.0, 14.0),
- (277, 4.0, 9.0),
- (896, 4.0, 21.0),
- (697, 4.0, 20.0),
- (3812, 4.0, 21.0),
- (5143, 4.0, 18.0),
- (4071, 4.0, 17.0),
- (1301, 4.0, 14.0),
- (927, 4.0, 19.0),
- (9, 4.0, 30.0),
- (6, 4.0, 18.0),
- (681, 4.0, 18.0),
- (296, 4.0, 15.0),
- (3208, 4.0, 54.0),
- (5062, 4.0, 7.0),
- (4623, 4.0, 17.0),
- (305, 4.0, 12.0),
- (5059, 4.0, 38.0),
- (5070, 4.0, 13.0),
- (700, 4.0, 24.0),
- (4768, 4.0, 18.0),
- (41, 4.0, 11.0),
- (722, 4.0, 29.0),
- (1272, 4.0, 25.0),
- (1281, 4.0, 15.0),
- (37, 4.0, 24.0),
- (726, 4.0, 42.0),
- (2579, 4.0, 12.0),
- (240, 4.0, 26.0),
- (1671, 3.0, 8.0),
- (532, 3.0, 8.0),
- (4861, 3.0, 16.0),
- (987, 3.0, 18.0),
- (3196, 3.0, 13.0),
- (938, 3.0, 14.0),
- (4842, 3.0, 19.0),
- (4504, 3.0, 3.0),
- (885, 3.0, 12.0),
- (842, 3.0, 17.0),
- (4450, 3.0, 17.0),
- (2993, 3.0, 14.0),
- (565, 3.0, 10.0),
- (1566, 3.0, 11.0),
- (4969, 3.0, 10.0),
- (889, 3.0, 13.0),
- (1668, 3.0, 17.0),
- (1014, 3.0, 17.0),
- (866, 3.0, 7.0),
- (1018, 3.0, 18.0),
- (4795, 3.0, 11.0),
- (3007, 3.0, 34.0),
- (4855, 3.0, 14.0),
- (518, 3.0, 31.0),
- (3618, 3.0, 12.0),
- (555, 3.0, 19.0),
- (4491, 3.0, 17.0),
- (871, 3.0, 8.0),
- (895, 3.0, 15.0),
- (3191, 3.0, 5.0),
- (4496, 3.0, 8.0),
- (998, 3.0, 8.0),
- (970, 3.0, 19.0),
- (4786, 3.0, 8.0),
- (977, 3.0, 8.0),
- (4837, 3.0, 24.0),
- (854, 3.0, 16.0),
- (1038, 3.0, 12.0),
- (2989, 3.0, 15.0),
- (1574, 3.0, 9.0),
- (1058, 3.0, 19.0),
- (1513, 3.0, 4.0),
- (3610, 3.0, 5.0),
- (712, 3.0, 27.0),
- (4943, 3.0, 14.0),
- (4586, 3.0, 9.0),
- (1262, 3.0, 17.0),
- (1264, 3.0, 12.0),
- (3069, 3.0, 8.0),
- (631, 3.0, 5.0),
- (3072, 3.0, 52.0),
- (727, 3.0, 13.0),
- (1413, 3.0, 4.0),
- (1405, 3.0, 10.0),
- (4909, 3.0, 17.0),
- (721, 3.0, 19.0),
- (4663, 3.0, 7.0),
- (3108, 3.0, 18.0),
- (3564, 3.0, 11.0),
- (1437, 3.0, 11.0),
- (4647, 3.0, 17.0),
- (648, 3.0, 22.0),
- (650, 3.0, 4.0),
- (651, 3.0, 52.0),
- (3079, 3.0, 21.0),
- (4921, 3.0, 8.0),
- (3570, 3.0, 29.0),
- (3093, 3.0, 17.0),
- (662, 3.0, 13.0),
- (687, 3.0, 24.0),
- (1343, 3.0, 16.0),
- (4618, 3.0, 19.0),
- (4619, 3.0, 21.0),
- (1354, 3.0, 11.0),
- (1261, 3.0, 18.0),
- (741, 3.0, 14.0),
- (4506, 3.0, 6.0),
- (785, 3.0, 30.0),
- (833, 3.0, 13.0),
- (4763, 3.0, 8.0),
- (1076, 3.0, 15.0),
- (4749, 3.0, 4.0),
- (820, 3.0, 22.0),
- (4876, 3.0, 24.0),
- (798, 3.0, 17.0),
- (791, 3.0, 26.0),
- (790, 3.0, 11.0),
- (4716, 3.0, 4.0),
- (585, 3.0, 8.0),
- (4711, 3.0, 8.0),
- (3031, 3.0, 3.0),
- (674, 3.0, 11.0),
- (1499, 3.0, 9.0),
- (1251, 3.0, 19.0),
- (4707, 3.0, 13.0),
- (1198, 3.0, 14.0),
- (1213, 3.0, 13.0),
- (596, 3.0, 14.0),
- (3042, 3.0, 11.0),
- (4552, 3.0, 13.0),
- (4554, 3.0, 11.0),
- (761, 3.0, 14.0),
- (760, 3.0, 25.0),
- (757, 3.0, 10.0),
- (4685, 3.0, 15.0),
- (1240, 3.0, 25.0),
- (1247, 3.0, 16.0),
- (4947, 3.0, 11.0),
- (1673, 3.0, 7.0),
- (924, 3.0, 19.0),
- (260, 3.0, 14.0),
- (92, 3.0, 7.0),
- (354, 3.0, 16.0),
- (4145, 3.0, 27.0),
- (5115, 3.0, 13.0),
- (4142, 3.0, 24.0),
- (2447, 3.0, 3.0),
- (129, 3.0, 40.0),
- (4137, 3.0, 27.0),
- (346, 3.0, 25.0),
- (335, 3.0, 10.0),
- (4110, 3.0, 7.0),
- (332, 3.0, 12.0),
- (2128, 3.0, 4.0),
- (132, 3.0, 15.0),
- (326, 3.0, 7.0),
- (4100, 3.0, 16.0),
- (4098, 3.0, 14.0),
- (4097, 3.0, 18.0),
- (133, 3.0, 17.0),
- (5052, 3.0, 8.0),
- (4148, 3.0, 16.0),
- (121, 3.0, 29.0),
- (359, 3.0, 11.0),
- (107, 3.0, 18.0),
- (94, 3.0, 18.0),
- (4204, 3.0, 26.0),
- (3436, 3.0, 11.0),
- (95, 3.0, 11.0),
- (103, 3.0, 29.0),
- (4197, 3.0, 15.0),
- (3378, 3.0, 14.0),
- (3324, 3.0, 6.0),
- (2688, 3.0, 14.0),
- (2318, 3.0, 6.0),
- (3327, 3.0, 11.0),
- (375, 3.0, 18.0),
- (2845, 3.0, 10.0),
- (3720, 3.0, 19.0),
- (2029, 3.0, 5.0),
- (4173, 3.0, 17.0),
- (3434, 3.0, 13.0),
- (120, 3.0, 18.0),
- (5053, 3.0, 11.0),
- (3335, 3.0, 6.0),
- (3917, 3.0, 7.0),
- (4015, 3.0, 13.0),
- (2336, 3.0, 9.0),
- (2248, 3.0, 5.0),
- (2251, 3.0, 17.0),
- (4020, 3.0, 3.0),
- (245, 3.0, 10.0),
- (2335, 3.0, 13.0),
- (241, 3.0, 11.0),
- (3972, 3.0, 6.0),
- (230, 3.0, 28.0),
- (3968, 3.0, 25.0),
- (199, 3.0, 18.0),
- (225, 3.0, 12.0),
- (200, 3.0, 12.0),
- (2290, 3.0, 29.0),
- (2324, 3.0, 15.0),
- (2320, 3.0, 9.0),
- (2312, 3.0, 12.0),
- (205, 3.0, 12.0),
- (182, 3.0, 7.0),
- (4427, 3.0, 29.0),
- (310, 3.0, 20.0),
- (5103, 3.0, 16.0),
- (3918, 3.0, 13.0),
- (3749, 3.0, 8.0),
- (2410, 3.0, 6.0),
- (3338, 3.0, 17.0),
- (294, 3.0, 9.0),
- (3414, 3.0, 26.0),
- (2174, 3.0, 4.0),
- (2176, 3.0, 5.0),
- (3757, 3.0, 6.0),
- (3763, 3.0, 18.0),
- (2197, 3.0, 7.0),
- (2199, 3.0, 8.0),
- (160, 3.0, 11.0),
- (3363, 3.0, 8.0),
- (163, 3.0, 11.0),
- (169, 3.0, 34.0),
- (4047, 3.0, 9.0),
- (4045, 3.0, 8.0),
- (3695, 3.0, 37.0),
- (4161, 3.0, 23.0),
- (209, 3.0, 15.0),
- (4336, 3.0, 17.0),
- (3835, 3.0, 14.0),
- (3884, 3.0, 18.0),
- (74, 3.0, 9.0),
- (2953, 3.0, 15.0),
- (4311, 3.0, 14.0),
- (2510, 3.0, 10.0),
- (3310, 3.0, 17.0),
- (1747, 3.0, 7.0),
- (2949, 3.0, 7.0),
- (479, 3.0, 38.0),
- (2593, 3.0, 5.0),
- (2899, 3.0, 9.0),
- (475, 3.0, 5.0),
- (3876, 3.0, 12.0),
- (48, 3.0, 10.0),
- (44, 3.0, 8.0),
- (2934, 3.0, 13.0),
- (1787, 3.0, 5.0),
- (3807, 3.0, 16.0),
- (1775, 3.0, 4.0),
- (4367, 3.0, 28.0),
- (35, 3.0, 13.0),
- (487, 3.0, 7.0),
- (2913, 3.0, 27.0),
- (2898, 3.0, 8.0),
- (86, 3.0, 14.0),
- (4393, 3.0, 15.0),
- (4245, 3.0, 14.0),
- (3640, 3.0, 8.0),
- (4, 3.0, 26.0),
- (4390, 3.0, 11.0),
- (13, 3.0, 19.0),
- (5129, 3.0, 26.0),
- (404, 3.0, 30.0),
- (3404, 3.0, 12.0),
- (89, 3.0, 8.0),
- (1227, 2.0, 7.0),
- (1187, 2.0, 4.0),
- (2661, 2.0, 5.0),
- (3951, 2.0, 19.0),
- (975, 2.0, 6.0),
- (2637, 2.0, 10.0),
- (2370, 2.0, 4.0),
- (2377, 2.0, 4.0),
- (3195, 2.0, 22.0),
- (2, 2.0, 6.0),
- (2667, 2.0, 2.0),
- (2376, 2.0, 6.0),
- (4717, 2.0, 12.0),
- (1229, 2.0, 2.0),
- (3790, 2.0, 4.0),
- (1230, 2.0, 12.0),
- (1165, 2.0, 6.0),
- (2374, 2.0, 7.0),
- (925, 2.0, 8.0),
- (974, 2.0, 5.0),
- (2646, 2.0, 17.0),
- (2621, 2.0, 4.0),
- (2725, 2.0, 2.0),
- (3543, 2.0, 8.0),
- (1214, 2.0, 4.0),
- (3819, 2.0, 4.0),
- (3833, 2.0, 3.0),
- (1219, 2.0, 6.0),
- (931, 2.0, 3.0),
- (939, 2.0, 9.0),
- (2728, 2.0, 9.0),
- (950, 2.0, 14.0),
- (4695, 2.0, 6.0),
- (953, 2.0, 10.0),
- (1208, 2.0, 6.0),
- (930, 2.0, 3.0),
- (3198, 2.0, 8.0),
- (3147, 2.0, 29.0),
- (1200, 2.0, 4.0),
- (1199, 2.0, 12.0),
- (955, 2.0, 13.0),
- (1223, 2.0, 11.0),
- (2342, 2.0, 6.0),
- (4700, 2.0, 6.0),
- (2350, 2.0, 3.0),
- (1225, 2.0, 6.0),
- (2355, 2.0, 5.0),
- (1194, 2.0, 4.0),
- (957, 2.0, 15.0),
- (3947, 2.0, 4.0),
- (2488, 2.0, 13.0),
- (1154, 2.0, 2.0),
- (2465, 2.0, 8.0),
- (3159, 2.0, 6.0),
- (3163, 2.0, 12.0),
- (4800, 2.0, 4.0),
- (2507, 2.0, 3.0),
- (1003, 2.0, 9.0),
- (3912, 2.0, 8.0),
- (3883, 2.0, 7.0),
- (3885, 2.0, 10.0),
- (2450, 2.0, 6.0),
- (2451, 2.0, 3.0),
- (2682, 2.0, 5.0),
- (3888, 2.0, 6.0),
- (2458, 2.0, 2.0),
- (1025, 2.0, 18.0),
- (1026, 2.0, 25.0),
- (2384, 2.0, 4.0),
- (3889, 2.0, 10.0),
- (1065, 2.0, 9.0),
- (3520, 2.0, 13.0),
- (1063, 2.0, 22.0),
- (3890, 2.0, 6.0),
- (1061, 2.0, 5.0),
- (1031, 2.0, 7.0),
- (2475, 2.0, 4.0),
- (4783, 2.0, 7.0),
- (2479, 2.0, 3.0),
- (2482, 2.0, 4.0),
- (2484, 2.0, 8.0),
- (2485, 2.0, 2.0),
- (1035, 2.0, 35.0),
- (3878, 2.0, 14.0),
- (996, 2.0, 5.0),
- (1098, 2.0, 4.0),
- (1101, 2.0, 8.0),
- (2387, 2.0, 7.0),
- (2710, 2.0, 2.0),
- (3938, 2.0, 25.0),
- (2561, 2.0, 7.0),
- (2406, 2.0, 2.0),
- (3872, 2.0, 5.0),
- (1139, 2.0, 21.0),
- (2487, 2.0, 14.0),
- (4809, 2.0, 10.0),
- (2556, 2.0, 6.0),
- (2552, 2.0, 3.0),
- (984, 2.0, 5.0),
- (2521, 2.0, 2.0),
- (1132, 2.0, 10.0),
- (3155, 2.0, 6.0),
- (1129, 2.0, 6.0),
- (1127, 2.0, 14.0),
- (2516, 2.0, 5.0),
- (988, 2.0, 12.0),
- (4741, 2.0, 10.0),
- (3528, 2.0, 11.0),
- (1114, 2.0, 8.0),
- (4746, 2.0, 12.0),
- (4806, 2.0, 7.0),
- (3190, 2.0, 6.0),
- (2514, 2.0, 3.0),
- (4747, 2.0, 7.0),
- (1105, 2.0, 12.0),
- (3913, 2.0, 2.0),
- (2415, 2.0, 12.0),
- (2974, 2.0, 19.0),
- (1234, 2.0, 9.0),
- (3691, 2.0, 28.0),
- (4246, 2.0, 7.0),
- (4527, 2.0, 14.0),
- (2879, 2.0, 3.0),
- (1527, 2.0, 8.0),
- (4250, 2.0, 16.0),
- (4275, 2.0, 13.0),
- (1543, 2.0, 5.0),
- (1879, 2.0, 4.0),
- (2901, 2.0, 9.0),
- (4296, 2.0, 8.0),
- (4300, 2.0, 9.0),
- (4302, 2.0, 10.0),
- (4503, 2.0, 9.0),
- (3674, 2.0, 25.0),
- (4307, 2.0, 5.0),
- (2912, 2.0, 15.0),
- (4316, 2.0, 15.0),
- (1523, 2.0, 12.0),
- (1512, 2.0, 3.0),
- (4321, 2.0, 6.0),
- (3600, 2.0, 10.0),
- (1449, 2.0, 7.0),
- (2007, 2.0, 21.0),
- (3711, 2.0, 3.0),
- (3052, 2.0, 8.0),
- (3051, 2.0, 10.0),
- (4559, 2.0, 10.0),
- (4557, 2.0, 13.0),
- (1476, 2.0, 6.0),
- (4199, 2.0, 9.0),
- (4553, 2.0, 12.0),
- (1994, 2.0, 4.0),
- (3046, 2.0, 8.0),
- (4545, 2.0, 8.0),
- (1988, 2.0, 2.0),
- (4230, 2.0, 9.0),
- (1498, 2.0, 11.0),
- (4233, 2.0, 9.0),
- (4319, 2.0, 15.0),
- (2919, 2.0, 6.0),
- (2850, 2.0, 3.0),
- (1752, 2.0, 2.0),
- (4456, 2.0, 6.0),
- (2992, 2.0, 7.0),
- (4378, 2.0, 8.0),
- (4379, 2.0, 6.0),
- (4444, 2.0, 2.0),
- (1655, 2.0, 4.0),
- (3629, 2.0, 5.0),
- (4384, 2.0, 9.0),
- (1661, 2.0, 3.0),
- (4386, 2.0, 11.0),
- (4437, 2.0, 9.0),
- (1665, 2.0, 3.0),
- (4392, 2.0, 19.0),
- (4401, 2.0, 7.0),
- (4414, 2.0, 5.0),
- (1685, 2.0, 9.0),
- (3634, 2.0, 14.0),
- (3650, 2.0, 6.0),
- (4371, 2.0, 7.0),
- (4494, 2.0, 31.0),
- (2994, 2.0, 15.0),
- (4329, 2.0, 3.0),
- (2924, 2.0, 14.0),
- (3664, 2.0, 3.0),
- (919, 2.0, 4.0),
- (1588, 2.0, 8.0),
- (4485, 2.0, 3.0),
- (2932, 2.0, 6.0),
- (3009, 2.0, 6.0),
- (1595, 2.0, 3.0),
- (1780, 2.0, 2.0),
- (4363, 2.0, 9.0),
- (4364, 2.0, 13.0),
- (2941, 2.0, 8.0),
- (1766, 2.0, 3.0),
- (1620, 2.0, 2.0),
- (1627, 2.0, 5.0),
- (1764, 2.0, 14.0),
- (3713, 2.0, 16.0),
- (4577, 2.0, 9.0),
- (3986, 2.0, 26.0),
- (1284, 2.0, 5.0),
- (4658, 2.0, 9.0),
- (4034, 2.0, 8.0),
- (4652, 2.0, 6.0),
- (4039, 2.0, 7.0),
- (1302, 2.0, 8.0),
- (3565, 2.0, 4.0),
- (4049, 2.0, 12.0),
- (3566, 2.0, 22.0),
- (1313, 2.0, 9.0),
- (2768, 2.0, 7.0),
- (2208, 2.0, 4.0),
- (2205, 2.0, 32.0),
- (1320, 2.0, 3.0),
- (2202, 2.0, 15.0),
- (4057, 2.0, 10.0),
- (1329, 2.0, 7.0),
- (2180, 2.0, 7.0),
- (4660, 2.0, 38.0),
- (3559, 2.0, 29.0),
- (1340, 2.0, 8.0),
- (3765, 2.0, 18.0),
- (2304, 2.0, 7.0),
- (3991, 2.0, 13.0),
- (3554, 2.0, 10.0),
- (2742, 2.0, 3.0),
- (2288, 2.0, 9.0),
- (4674, 2.0, 3.0),
- (4673, 2.0, 10.0),
- (2284, 2.0, 11.0),
- (4004, 2.0, 6.0),
- (4016, 2.0, 3.0),
- (1265, 2.0, 9.0),
- (2258, 2.0, 4.0),
- (4667, 2.0, 10.0),
- (2257, 2.0, 3.0),
- (1274, 2.0, 2.0),
- (4025, 2.0, 13.0),
- (3768, 2.0, 19.0),
- (4068, 2.0, 9.0),
- (4073, 2.0, 18.0),
- (3065, 2.0, 5.0),
- (3745, 2.0, 15.0),
- (4608, 2.0, 7.0),
- (4107, 2.0, 17.0),
- (2800, 2.0, 2.0),
- (3737, 2.0, 4.0),
- (4127, 2.0, 9.0),
- (4128, 2.0, 5.0),
- (2813, 2.0, 4.0),
- (2815, 2.0, 4.0),
- (3733, 2.0, 3.0),
- (3581, 2.0, 4.0),
- (1409, 2.0, 17.0),
- (1411, 2.0, 4.0),
- (2819, 2.0, 2.0),
- (2826, 2.0, 4.0),
- (2830, 2.0, 4.0),
- (1427, 2.0, 2.0),
- (4170, 2.0, 11.0),
- (1389, 2.0, 6.0),
- (3746, 2.0, 7.0),
- (4076, 2.0, 32.0),
- (1384, 2.0, 17.0),
- (1347, 2.0, 6.0),
- (2164, 2.0, 6.0),
- (1350, 2.0, 14.0),
- (3088, 2.0, 3.0),
- (2163, 2.0, 3.0),
- (1352, 2.0, 8.0),
- (2788, 2.0, 2.0),
- (4624, 2.0, 5.0),
- (4086, 2.0, 9.0),
- (1359, 2.0, 3.0),
- (1361, 2.0, 4.0),
- (3087, 2.0, 11.0),
- (4091, 2.0, 5.0),
- (4096, 2.0, 6.0),
- (1370, 2.0, 7.0),
- (3082, 2.0, 20.0),
- (3081, 2.0, 12.0),
- (1807, 2.0, 9.0),
- (4638, 2.0, 2.0),
- (3824, 2.0, 5.0),
- (233, 2.0, 9.0),
- (706, 2.0, 17.0),
- (709, 2.0, 7.0),
- (4915, 2.0, 14.0),
- (711, 2.0, 6.0),
- (4914, 2.0, 10.0),
- (227, 2.0, 13.0),
- (714, 2.0, 6.0),
- (226, 2.0, 9.0),
- (3482, 2.0, 7.0),
- (4910, 2.0, 10.0),
- (220, 2.0, 20.0),
- (219, 2.0, 6.0),
- (723, 2.0, 26.0),
- (5083, 2.0, 5.0),
- (730, 2.0, 8.0),
- (4907, 2.0, 8.0),
- (734, 2.0, 14.0),
- (3255, 2.0, 11.0),
- (239, 2.0, 14.0),
- (636, 2.0, 7.0),
- (246, 2.0, 13.0),
- (285, 2.0, 12.0),
- (646, 2.0, 25.0),
- (3341, 2.0, 10.0),
- (3428, 2.0, 7.0),
- (276, 2.0, 4.0),
- (661, 2.0, 18.0),
- (272, 2.0, 4.0),
- (271, 2.0, 14.0),
- (666, 2.0, 11.0),
- (667, 2.0, 8.0),
- (673, 2.0, 18.0),
- (266, 2.0, 19.0),
- (264, 2.0, 3.0),
- (262, 2.0, 30.0),
- (3426, 2.0, 5.0),
- (254, 2.0, 2.0),
- (248, 2.0, 6.0),
- (736, 2.0, 5.0),
- (189, 2.0, 3.0),
- (751, 2.0, 16.0),
- (3420, 2.0, 13.0),
- (149, 2.0, 14.0),
- (3413, 2.0, 8.0),
- (146, 2.0, 3.0),
- (3238, 2.0, 35.0),
- (5108, 2.0, 7.0),
- (3368, 2.0, 6.0),
- (3488, 2.0, 6.0),
- (3235, 2.0, 9.0),
- (809, 2.0, 10.0),
- (810, 2.0, 16.0),
- (4877, 2.0, 13.0),
- (3373, 2.0, 4.0),
- (4872, 2.0, 17.0),
- (112, 2.0, 5.0),
- (110, 2.0, 16.0),
- (822, 2.0, 19.0),
- (104, 2.0, 7.0),
- (150, 2.0, 6.0),
- (780, 2.0, 5.0),
- (151, 2.0, 7.0),
- (159, 2.0, 7.0),
- (752, 2.0, 5.0),
- (753, 2.0, 5.0),
- (755, 2.0, 15.0),
- (176, 2.0, 27.0),
- (759, 2.0, 11.0),
- (173, 2.0, 36.0),
- (166, 2.0, 6.0),
- (770, 2.0, 8.0),
- (152, 2.0, 22.0),
- (156, 2.0, 6.0),
- (153, 2.0, 12.0),
- (771, 2.0, 7.0),
- (773, 2.0, 11.0),
- (4891, 2.0, 6.0),
- (778, 2.0, 10.0),
- (3240, 2.0, 14.0),
- (638, 2.0, 16.0),
- (635, 2.0, 10.0),
- ...]</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Quick spot check - don&#39;t change this code - just use it to test your functions</span>
 <span class="n">rec_ids</span><span class="p">,</span> <span class="n">rec_names</span> <span class="o">=</span> <span class="n">user_user_recs_part2</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The top 10 recommendations for user 20 are the following article ids:&quot;</span><span class="p">)</span>
@@ -17280,10 +16230,10 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>The top 10 recommendations for user 20 are the following article ids:
-[&#39;337.0&#39;, &#39;1161.0&#39;, &#39;1429.0&#39;, &#39;1059.0&#39;, &#39;444.0&#39;, &#39;821.0&#39;, &#39;1336.0&#39;, &#39;164.0&#39;, &#39;949.0&#39;, &#39;1172.0&#39;]
+[&#39;109.0&#39;, &#39;1391.0&#39;, &#39;1354.0&#39;, &#39;362.0&#39;, &#39;336.0&#39;, &#39;1151.0&#39;, &#39;1154.0&#39;, &#39;1176.0&#39;, &#39;142.0&#39;, &#39;761.0&#39;]
 
 The top 10 recommendations for user 20 are the following article names:
-[&#39;the nurse assignment problem&#39;, &#39;annual precipitation by country 1990-2009&#39;, &#39;customer demographics and sales&#39;, &#39;births attended by skilled health staff (% of total) by country&#39;, &#39;analyze open data sets with spark &amp; pixiedust&#39;, &#39;create a project for watson machine learning in dsx&#39;, &#39;country statistics - europe - population and society&#39;, &#39;data model with streaming analytics and python&#39;, &#39;visualize car data with brunel&#39;, &#39;uci ml repository: chronic kidney disease data set&#39;, &#39;predicting churn with the spss random tree algorithm&#39;, &#39;breast cancer detection with xgboost, wml and scikit&#39;, &#39;random forest interpretation – conditional feature contributions&#39;, &#39;some random weekend reading&#39;, &#39;united states demographic measures: zip code tabulation areas (zctas)&#39;, &#39;top 10 machine learning use cases: part 1&#39;, &#39;what is text analytics?&#39;, &#39;time series anomaly detection algorithms – stats and bots&#39;, &#39;healthcare python streaming application demo&#39;, &#39;overlapping co-cluster recommendation algorithm (ocular)&#39;, &#39;from scikit-learn model to cloud with wml client&#39;, &#39;insights from new york car accident reports&#39;, &#39;d3heatmap: interactive heat maps&#39;, &#39;working with ibm cloud object storage in r&#39;, &#39;xml2 1.0.0&#39;, &#39;python machine learning: scikit-learn tutorial&#39;, &#39;leverage python, scikit, and text classification for behavioral profiling&#39;, &#39;access db2 warehouse on cloud and db2 with python&#39;, &#39;analyze energy consumption in buildings&#39;, &#39;contraceptive prevalence (% women 15-49) by country&#39;, &#39;pixiedust gets its first community-driven feature in 1.0.4&#39;, &#39;welcome to pixiedust&#39;, &#39;analyze open data sets with pandas dataframes&#39;, &#39;excel files: loading from object storage — python&#39;, &#39;movie recommender system with spark machine learning&#39;, &#39;workflow in r&#39;, &#39;united states demographic measures: population and age&#39;]
+[&#39;introduction to neural networks, advantages and applications&#39;, &#39;airbnb data for analytics: vienna calendar&#39;, &#34;a beginner&#39;s guide to variational methods&#34;, &#39;super fast string matching in python&#39;, &#39;apache spark lab, part 3: machine learning&#39;, &#39;airbnb data for analytics: venice calendar&#39;, &#39;score a predictive model built with ibm spss modeler, wml &amp; dsx&#39;, &#39;timeseries data analysis of iot events by using jupyter notebook&#39;, &#39;learn tensorflow and deep learning together and now!&#39;, &#39;programmatic evaluation using watson conversation&#39;, &#39;using deep learning to reconstruct high-resolution audio&#39;, &#39;intentional homicide, number and rate per 100,000 population, by country&#39;, &#39;using machine learning to predict baseball injuries&#39;, &#39;apache spark lab, part 1: basic concepts&#39;, &#39;analyze energy consumption in buildings&#39;, &#39;analyze accident reports on amazon emr spark&#39;, &#39;use apache systemml and spark for machine learning&#39;, &#39;use xgboost, scikit-learn &amp; ibm watson machine learning apis&#39;, &#39;ml optimization using cognitive assistant&#39;, &#39;times world university ranking analysis&#39;, &#39;airbnb data for analytics: venice reviews&#39;, &#39;analyzing streaming data from kafka topics&#39;, &#39;10 powerful features on watson data platform, no coding necessary&#39;, &#39;airbnb data for analytics: chicago listings&#39;, &#39;accelerate your workflow with dsx&#39;, &#39;pixieapp for outlier detection&#39;, &#39;deploy your python model as a restful api&#39;, &#39;ibm watson facebook posts for 2015&#39;, &#39;military expenditure as % of gdp by country&#39;, &#39;worldwide fuel oil consumption by household (in 1000 metric tons)&#39;, &#39;use spark for scala to load data and run sql queries&#39;, &#39;fortune 100 companies&#39;, &#39;gosales transactions for logistic regression model&#39;, &#39;uci: red wine quality&#39;, &#39;occupation (2015): united states demographic measures&#39;, &#39;uci: white wine quality&#39;, &#39;ingest data from message hub in a streams flow&#39;, &#39;airbnb data for analytics: washington d.c. listings&#39;, &#39;model bike sharing data with spss&#39;, &#39;analyzing data by using the sparkling.data library features&#39;, &#39;uci: sms spam collection&#39;, &#39;visualize the 1854 london cholera outbreak&#39;, &#39;predicting churn with the spss random tree algorithm&#39;, &#39;learn basics about notebooks and apache spark&#39;, &#39;build a naive-bayes model with wml &amp; dsx&#39;, &#39;develop a scala spark model on chicago building violations&#39;, &#39;developing for the ibm streaming analytics service&#39;, &#39;insights from new york car accident reports&#39;, &#39;labor&#39;, &#39;uci: poker hand - testing data set&#39;, &#39;real-time sentiment analysis of twitter hashtags with spark (+ pixiedust)&#39;, &#39;overlapping co-cluster recommendation algorithm (ocular)&#39;, &#39;analyze open data sets with spark &amp; pixiedust&#39;, &#39;probabilistic graphical models tutorial\u200a—\u200apart 1 – stats and bots&#39;, &#39;putting a human face on machine learning&#39;, &#39;statistics for hackers&#39;, &#39;small steps to tensorflow&#39;, &#39;deep learning from scratch i: computational graphs&#39;, &#39;use spark for python to load data and run sql queries&#39;]
 </pre>
 </div>
 </div>
@@ -17339,6 +16289,8 @@ The top 10 recommendations for user 20 are the following article names:
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>level_0</th>
+      <th>index</th>
       <th>neighbor_id</th>
       <th>similarity</th>
       <th>num_interactions</th>
@@ -17347,73 +16299,305 @@ The top 10 recommendations for user 20 are the following article names:
   <tbody>
     <tr>
       <th>0</th>
+      <td>0</td>
+      <td>0</td>
       <td>3933</td>
       <td>35.0</td>
-      <td>35.0</td>
+      <td>45</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>1</td>
+      <td>1</td>
       <td>23</td>
       <td>17.0</td>
-      <td>135.0</td>
+      <td>364</td>
     </tr>
     <tr>
       <th>2</th>
+      <td>2</td>
+      <td>2</td>
       <td>3782</td>
       <td>17.0</td>
-      <td>135.0</td>
+      <td>363</td>
     </tr>
     <tr>
       <th>3</th>
+      <td>3</td>
+      <td>3</td>
       <td>203</td>
       <td>15.0</td>
-      <td>96.0</td>
+      <td>160</td>
     </tr>
     <tr>
       <th>4</th>
+      <td>4</td>
+      <td>4</td>
       <td>4459</td>
       <td>15.0</td>
-      <td>96.0</td>
+      <td>158</td>
     </tr>
     <tr>
       <th>...</th>
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
       <th>5143</th>
-      <td>2326</td>
+      <td>5136</td>
+      <td>5136</td>
+      <td>2315</td>
       <td>0.0</td>
-      <td>1.0</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>5144</th>
-      <td>2327</td>
+      <td>5141</td>
+      <td>5141</td>
+      <td>2323</td>
       <td>0.0</td>
-      <td>1.0</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>5145</th>
-      <td>2328</td>
+      <td>5144</td>
+      <td>5144</td>
+      <td>2327</td>
       <td>0.0</td>
-      <td>4.0</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>5146</th>
+      <td>5146</td>
+      <td>5146</td>
       <td>2329</td>
       <td>0.0</td>
-      <td>1.0</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>5147</th>
+      <td>5147</td>
+      <td>5147</td>
       <td>5149</td>
       <td>0.0</td>
-      <td>1.0</td>
+      <td>1</td>
     </tr>
   </tbody>
 </table>
-<p>5148 rows × 3 columns</p>
+<p>5148 rows × 5 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_top_sorted_users</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">18</span><span class="p">]</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[&nbsp;]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>level_0</th>
+      <th>index</th>
+      <th>neighbor_id</th>
+      <th>similarity</th>
+      <th>num_interactions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>3870</td>
+      <td>74.0</td>
+      <td>144</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>1</td>
+      <td>3782</td>
+      <td>39.0</td>
+      <td>363</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>2</td>
+      <td>23</td>
+      <td>38.0</td>
+      <td>364</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>4</td>
+      <td>203</td>
+      <td>33.0</td>
+      <td>160</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>3</td>
+      <td>4459</td>
+      <td>33.0</td>
+      <td>158</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>6</td>
+      <td>98</td>
+      <td>29.0</td>
+      <td>170</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>5</td>
+      <td>5</td>
+      <td>3764</td>
+      <td>29.0</td>
+      <td>169</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8</td>
+      <td>8</td>
+      <td>49</td>
+      <td>29.0</td>
+      <td>147</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>7</td>
+      <td>7</td>
+      <td>3697</td>
+      <td>29.0</td>
+      <td>145</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>10</td>
+      <td>10</td>
+      <td>242</td>
+      <td>25.0</td>
+      <td>148</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>9</td>
+      <td>9</td>
+      <td>3910</td>
+      <td>25.0</td>
+      <td>147</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12</td>
+      <td>12</td>
+      <td>40</td>
+      <td>24.0</td>
+      <td>78</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>11</td>
+      <td>11</td>
+      <td>4932</td>
+      <td>24.0</td>
+      <td>76</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>13</td>
+      <td>58</td>
+      <td>23.0</td>
+      <td>142</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>14</td>
+      <td>3740</td>
+      <td>23.0</td>
+      <td>140</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>15</td>
+      <td>52</td>
+      <td>23.0</td>
+      <td>132</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>16</td>
+      <td>3596</td>
+      <td>23.0</td>
+      <td>131</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>17</td>
+      <td>290</td>
+      <td>22.0</td>
+      <td>80</td>
+    </tr>
+  </tbody>
+</table>
 </div>
 </div>
 
@@ -17446,7 +16630,7 @@ The top 10 recommendations for user 20 are the following article names:
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### Tests with a dictionary of results</span>
 
 <span class="n">user1_most_sim</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="n">user_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="c1"># Find the user that is most similar to user 1 </span>
-<span class="n">user131_10th_sim</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="n">user_id</span> <span class="o">=</span> <span class="mi">131</span><span class="p">)[</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">][</span><span class="mi">10</span><span class="p">]</span><span class="c1"># Find the 10th most similar user to user 131</span>
+<span class="n">user131_10th_sim</span> <span class="o">=</span> <span class="n">get_top_sorted_users</span><span class="p">(</span><span class="n">user_id</span> <span class="o">=</span> <span class="mi">131</span><span class="p">)[</span><span class="s1">&#39;neighbor_id&#39;</span><span class="p">][</span><span class="mi">9</span><span class="p">]</span><span class="c1"># Find the 10th most similar user to user 131</span>
 <span class="n">user131_10th_sim</span>
 </pre></div>
 
@@ -18865,9 +18049,9 @@ class="
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>As the number of latent features increase, the accuracy of the test set decreases which clearly indicates overfitting problem. Since there are only 20 users that are common in train and test sets, Rank based (to address cold start problem) or content based recommendations are more suitable in this case.</p>
-<p>For evaluating whether the recommendations are an improvement over the existing process, A/B testing can be done to see if there is significant improvement in user engagement. Users can be divided into two groups (Consider geographic region, platform (mobile vs tablet vs laptop), device type, user demographics
-(age, gender, country, etc), usage) - one with recommended articles and the other using existing process.</p>
-<p>Metrics such as time spent on articles, views, daily active users and guard rail metrics such as sample ratio mismatch, cache hit ratio (should same among control and treatment groups) can be used to measure the improvement. If the improvement satisfies both statistical and practical significance, recommendation system can be implemented.</p>
+<p>For evaluating whether the recommendations are an improvement over the existing process, A/B testing can be done to see if there is significant improvement in user engagement. Users can be divided into two groups with big enough sample sizes (Consider geographic region, platform (mobile vs tablet vs laptop), device type, user demographics
+(age, gender, country, etc), usage) - one with the new recommended articles and the other using existing baseline recommendations.</p>
+<p>Metrics such as time spent on articles, click-through rate for articles (although in the short term boosted CTR looks satisfying, it is important to see if users are bouncing off after clicking the article to avoid long-term consequences of poor quality article recommendations), conversion rate, Return of Investment, daily active users and guard rail metrics such as sample ratio mismatch, cache hit ratio (should same among control and treatment groups) can be used to measure the improvement. If the improvement satisfies both statistical and practical significance justifying ROI or customer lifetime value, recommendation system can be implemented.</p>
 <p>Alternatively, Qualitative analysis with user experience research (good for generating hypothesis, bad for scaling) or surveys (responders may not be representative) or human evaluation (having a team rate results but this can be different from actual users) can be conducted.
 Or
 Quantitative analysis with understanding user's activity logs, baselines, metric distributions or causal inference method can be used to measure the improvement.</p>
