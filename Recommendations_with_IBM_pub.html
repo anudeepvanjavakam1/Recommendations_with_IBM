@@ -16187,7 +16187,7 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
     <span class="n">rec_names</span> <span class="o">=</span> <span class="n">get_article_names</span><span class="p">(</span><span class="n">recs</span><span class="p">)</span>
 
     <span class="c1"># return your recommendations for this user_id </span>
-    <span class="k">return</span> <span class="n">recs</span><span class="p">[:</span><span class="n">m</span><span class="p">],</span> <span class="n">rec_names</span><span class="p">[</span><span class="n">m</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">recs</span><span class="p">[:</span><span class="n">m</span><span class="p">],</span> <span class="n">rec_names</span><span class="p">[:</span><span class="n">m</span><span class="p">]</span>
 </pre></div>
 
      </div>
@@ -16209,7 +16209,7 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
 <span class="nb">print</span><span class="p">(</span><span class="n">rec_ids</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The top 10 recommendations for user 20 are the following article names:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">rec_names</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rec_names</span><span class="p">))</span>
 </pre></div>
 
      </div>
@@ -16233,7 +16233,7 @@ The 3 most similar users to user 46 are: [4201, 3782, 23]
 [&#39;109.0&#39;, &#39;1391.0&#39;, &#39;1354.0&#39;, &#39;362.0&#39;, &#39;336.0&#39;, &#39;1151.0&#39;, &#39;1154.0&#39;, &#39;1176.0&#39;, &#39;142.0&#39;, &#39;761.0&#39;]
 
 The top 10 recommendations for user 20 are the following article names:
-[&#39;introduction to neural networks, advantages and applications&#39;, &#39;airbnb data for analytics: vienna calendar&#39;, &#34;a beginner&#39;s guide to variational methods&#34;, &#39;super fast string matching in python&#39;, &#39;apache spark lab, part 3: machine learning&#39;, &#39;airbnb data for analytics: venice calendar&#39;, &#39;score a predictive model built with ibm spss modeler, wml &amp; dsx&#39;, &#39;timeseries data analysis of iot events by using jupyter notebook&#39;, &#39;learn tensorflow and deep learning together and now!&#39;, &#39;programmatic evaluation using watson conversation&#39;, &#39;using deep learning to reconstruct high-resolution audio&#39;, &#39;intentional homicide, number and rate per 100,000 population, by country&#39;, &#39;using machine learning to predict baseball injuries&#39;, &#39;apache spark lab, part 1: basic concepts&#39;, &#39;analyze energy consumption in buildings&#39;, &#39;analyze accident reports on amazon emr spark&#39;, &#39;use apache systemml and spark for machine learning&#39;, &#39;use xgboost, scikit-learn &amp; ibm watson machine learning apis&#39;, &#39;ml optimization using cognitive assistant&#39;, &#39;times world university ranking analysis&#39;, &#39;airbnb data for analytics: venice reviews&#39;, &#39;analyzing streaming data from kafka topics&#39;, &#39;10 powerful features on watson data platform, no coding necessary&#39;, &#39;airbnb data for analytics: chicago listings&#39;, &#39;accelerate your workflow with dsx&#39;, &#39;pixieapp for outlier detection&#39;, &#39;deploy your python model as a restful api&#39;, &#39;ibm watson facebook posts for 2015&#39;, &#39;military expenditure as % of gdp by country&#39;, &#39;worldwide fuel oil consumption by household (in 1000 metric tons)&#39;, &#39;use spark for scala to load data and run sql queries&#39;, &#39;fortune 100 companies&#39;, &#39;gosales transactions for logistic regression model&#39;, &#39;uci: red wine quality&#39;, &#39;occupation (2015): united states demographic measures&#39;, &#39;uci: white wine quality&#39;, &#39;ingest data from message hub in a streams flow&#39;, &#39;airbnb data for analytics: washington d.c. listings&#39;, &#39;model bike sharing data with spss&#39;, &#39;analyzing data by using the sparkling.data library features&#39;, &#39;uci: sms spam collection&#39;, &#39;visualize the 1854 london cholera outbreak&#39;, &#39;predicting churn with the spss random tree algorithm&#39;, &#39;learn basics about notebooks and apache spark&#39;, &#39;build a naive-bayes model with wml &amp; dsx&#39;, &#39;develop a scala spark model on chicago building violations&#39;, &#39;developing for the ibm streaming analytics service&#39;, &#39;insights from new york car accident reports&#39;, &#39;labor&#39;, &#39;uci: poker hand - testing data set&#39;, &#39;real-time sentiment analysis of twitter hashtags with spark (+ pixiedust)&#39;, &#39;overlapping co-cluster recommendation algorithm (ocular)&#39;, &#39;analyze open data sets with spark &amp; pixiedust&#39;, &#39;probabilistic graphical models tutorial\u200a—\u200apart 1 – stats and bots&#39;, &#39;putting a human face on machine learning&#39;, &#39;statistics for hackers&#39;, &#39;small steps to tensorflow&#39;, &#39;deep learning from scratch i: computational graphs&#39;, &#39;use spark for python to load data and run sql queries&#39;]
+10
 </pre>
 </div>
 </div>
@@ -16405,7 +16405,7 @@ The top 10 recommendations for user 20 are the following article names:
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_top_sorted_users</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">18</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_top_sorted_users</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -16493,111 +16493,56 @@ The top 10 recommendations for user 20 are the following article names:
       <td>158</td>
     </tr>
     <tr>
-      <th>5</th>
-      <td>6</td>
-      <td>6</td>
-      <td>98</td>
-      <td>29.0</td>
-      <td>170</td>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>6</th>
-      <td>5</td>
-      <td>5</td>
-      <td>3764</td>
-      <td>29.0</td>
-      <td>169</td>
+      <th>5143</th>
+      <td>5143</td>
+      <td>5143</td>
+      <td>2783</td>
+      <td>0.0</td>
+      <td>1</td>
     </tr>
     <tr>
-      <th>7</th>
-      <td>8</td>
-      <td>8</td>
-      <td>49</td>
-      <td>29.0</td>
-      <td>147</td>
+      <th>5144</th>
+      <td>5144</td>
+      <td>5144</td>
+      <td>2784</td>
+      <td>0.0</td>
+      <td>1</td>
     </tr>
     <tr>
-      <th>8</th>
-      <td>7</td>
-      <td>7</td>
-      <td>3697</td>
-      <td>29.0</td>
-      <td>145</td>
+      <th>5145</th>
+      <td>5145</td>
+      <td>5145</td>
+      <td>2786</td>
+      <td>0.0</td>
+      <td>1</td>
     </tr>
     <tr>
-      <th>9</th>
-      <td>10</td>
-      <td>10</td>
-      <td>242</td>
-      <td>25.0</td>
-      <td>148</td>
+      <th>5146</th>
+      <td>5146</td>
+      <td>5146</td>
+      <td>2787</td>
+      <td>0.0</td>
+      <td>1</td>
     </tr>
     <tr>
-      <th>10</th>
-      <td>9</td>
-      <td>9</td>
-      <td>3910</td>
-      <td>25.0</td>
-      <td>147</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>12</td>
-      <td>12</td>
-      <td>40</td>
-      <td>24.0</td>
-      <td>78</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>11</td>
-      <td>11</td>
-      <td>4932</td>
-      <td>24.0</td>
-      <td>76</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>13</td>
-      <td>13</td>
-      <td>58</td>
-      <td>23.0</td>
-      <td>142</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>14</td>
-      <td>14</td>
-      <td>3740</td>
-      <td>23.0</td>
-      <td>140</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>15</td>
-      <td>15</td>
-      <td>52</td>
-      <td>23.0</td>
-      <td>132</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>16</td>
-      <td>16</td>
-      <td>3596</td>
-      <td>23.0</td>
-      <td>131</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>17</td>
-      <td>17</td>
-      <td>290</td>
-      <td>22.0</td>
-      <td>80</td>
+      <th>5147</th>
+      <td>5147</td>
+      <td>5147</td>
+      <td>5149</td>
+      <td>0.0</td>
+      <td>1</td>
     </tr>
   </tbody>
 </table>
+<p>5148 rows × 5 columns</p>
 </div>
 </div>
 
